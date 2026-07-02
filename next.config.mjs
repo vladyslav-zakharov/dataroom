@@ -11,6 +11,8 @@ jiti('./src/env');
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Ships with strict airbnb lint; keep it out of the production build gate (run `yarn lint` separately).
+  eslint: { ignoreDuringBuilds: true },
   webpack(config) {
     // Grab the existing rule that handles SVG imports
     const fileLoaderRule = config.module.rules.find(rule =>

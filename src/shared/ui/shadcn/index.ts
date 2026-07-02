@@ -10,3 +10,5 @@ export * from './separator';
 export * from './skeleton';
 export * from './sonner';
 export * from './tooltip';
+export * from './form';
+export * from './label';
