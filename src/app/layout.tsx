@@ -3,7 +3,6 @@ import { ReactNode } from 'react';
 import type { Metadata } from 'next';
 import { Urbanist } from 'next/font/google';
 
-import { Header } from 'features';
 import { cn } from 'shared/lib';
 import { TanStackQueryProvider } from 'shared/providers';
 
@@ -33,10 +32,7 @@ const RootLayout = ({ children }: Props) => {
           urbanist.className,
         )}
       >
-        <TanStackQueryProvider>
-          <Header />
-          {children}
-        </TanStackQueryProvider>
+        <TanStackQueryProvider>{children}</TanStackQueryProvider>
       </body>
     </html>
   );
