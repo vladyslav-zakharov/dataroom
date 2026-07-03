@@ -1,6 +1,12 @@
+'use client';
+
 import type { FC, ReactNode } from 'react';
 
 import Link from 'next/link';
+
+import { BriefcaseBusiness } from 'lucide-react';
+
+import { DarkVeil } from 'shared/ui';
 
 interface Props {
   children: ReactNode;
@@ -8,32 +14,26 @@ interface Props {
 
 const AppShell: FC<Props> = ({ children }) => {
   return (
-    <div className="min-h-svh flex flex-col bg-background text-foreground">
-      <header className="border-b border-border sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container mx-auto px-4 h-14 flex items-center">
+    <div className="relative flex min-h-svh flex-col text-foreground">
+      <div aria-hidden className="pointer-events-none fixed inset-0 -z-20">
+        <DarkVeil hueShift={25} speed={0.6} warpAmount={0.1} />
+      </div>
+      <div
+        aria-hidden
+        className="pointer-events-none fixed inset-0 -z-10 bg-background/70"
+      />
+      <header className="sticky top-0 z-50 border-b border-border backdrop-blur-sm">
+        <div className="container mx-auto flex h-14 items-center px-4">
           <Link
             href="/"
-            className="flex items-center gap-2 font-semibold text-foreground hover:text-foreground/80 transition-colors"
+            className="flex items-center gap-2 font-semibold text-foreground transition-colors hover:text-foreground/80"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="h-5 w-5"
-              aria-hidden="true"
-            >
-              <path d="M20 7H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2Z" />
-              <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
-            </svg>
+            <BriefcaseBusiness className="h-5 w-5" />
             <span>Dataroom</span>
           </Link>
         </div>
       </header>
-      <main className="flex-1 container mx-auto px-4 py-6">{children}</main>
+      <main className="container mx-auto flex-1 px-4 py-6">{children}</main>
     </div>
   );
 };

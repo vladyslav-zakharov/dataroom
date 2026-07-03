@@ -7,8 +7,8 @@ import { DatabaseIcon, MoreHorizontalIcon, PencilIcon, Trash2Icon } from 'lucide
 import type { Dataroom } from 'entities';
 import { formatDate } from 'shared/lib';
 import {
+  BorderGlow,
   Button,
-  Card,
   CardContent,
   CardDescription,
   CardHeader,
@@ -35,66 +35,75 @@ export const DataroomCard: FC<Props> = ({ dataroom, itemCount, onOpen }) => {
   const itemLabel = itemCount === 1 ? '1 item' : `${itemCount} items`;
 
   return (
-    <Card
-      className="cursor-pointer transition-shadow hover:shadow-md hover:ring-1 hover:ring-foreground/20 focus-within:ring-2 focus-within:ring-ring"
-      role="article"
+    <BorderGlow
+      className="h-full cursor-pointer backdrop-blur-md transition-shadow"
+      backgroundColor="hsl(var(--card) / 0.6)"
+      glowColor="260 80 72"
+      colors={['#c084fc', '#818cf8', '#38bdf8']}
+      borderRadius={12}
+      glowRadius={30}
+      edgeSensitivity={25}
     >
-      <CardHeader>
-        <div className="flex items-start justify-between">
-          <div className="flex h-8 w-8 items-center justify-center rounded-md bg-muted text-muted-foreground">
-            <DatabaseIcon className="h-4 w-4" aria-hidden="true" />
-          </div>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-7 w-7 text-muted-foreground"
-                aria-label={`Actions for ${dataroom.name}`}
-                onClick={(event) => event.stopPropagation()}
-              >
-                <MoreHorizontalIcon className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <RenameDataroomDialog dataroomId={dataroom.id} currentName={dataroom.name}>
-                <DropdownMenuItem onSelect={(event) => event.preventDefault()}>
-                  <PencilIcon className="h-4 w-4" />
-                  Rename
-                </DropdownMenuItem>
-              </RenameDataroomDialog>
-              <DropdownMenuSeparator />
-              <DeleteDataroomDialog dataroomId={dataroom.id} dataroomName={dataroom.name}>
-                <DropdownMenuItem
-                  onSelect={(event) => event.preventDefault()}
-                  className="text-destructive focus:text-destructive"
+      <div
+        role="button"
+        tabIndex={0}
+        aria-label={`Open ${dataroom.name}`}
+        className="flex flex-1 flex-col rounded-[inherit] text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        onClick={onOpen}
+        onKeyDown={(event) => {
+          if (
+            (event.key === 'Enter' || event.key === ' ') &&
+            event.target === event.currentTarget
+          ) {
+            event.preventDefault();
+            onOpen();
+          }
+        }}
+      >
+        <CardHeader>
+          <div className="flex items-start justify-between">
+            <div className="flex h-8 w-8 items-center justify-center rounded-md bg-muted text-muted-foreground">
+              <DatabaseIcon className="h-4 w-4" aria-hidden="true" />
+            </div>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-7 w-7 text-muted-foreground"
+                  aria-label={`Actions for ${dataroom.name}`}
+                  onClick={(event) => event.stopPropagation()}
                 >
-                  <Trash2Icon className="h-4 w-4" />
-                  Delete
-                </DropdownMenuItem>
-              </DeleteDataroomDialog>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-        <CardTitle
-          className="cursor-pointer text-base"
-          onClick={onOpen}
-          tabIndex={0}
-          role="button"
-          onKeyDown={(event) => {
-            if (event.key === 'Enter' || event.key === ' ') {
-              event.preventDefault();
-              onOpen();
-            }
-          }}
-        >
-          {dataroom.name}
-        </CardTitle>
-        <CardDescription>{itemLabel}</CardDescription>
-      </CardHeader>
-      <CardContent className="cursor-pointer" onClick={onOpen}>
-        <p className="text-xs text-muted-foreground">Created {formattedDate}</p>
-      </CardContent>
-    </Card>
+                  <MoreHorizontalIcon className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <RenameDataroomDialog dataroomId={dataroom.id} currentName={dataroom.name}>
+                  <DropdownMenuItem onSelect={(event) => event.preventDefault()}>
+                    <PencilIcon className="h-4 w-4" />
+                    Rename
+                  </DropdownMenuItem>
+                </RenameDataroomDialog>
+                <DropdownMenuSeparator />
+                <DeleteDataroomDialog dataroomId={dataroom.id} dataroomName={dataroom.name}>
+                  <DropdownMenuItem
+                    onSelect={(event) => event.preventDefault()}
+                    className="text-destructive focus:text-destructive"
+                  >
+                    <Trash2Icon className="h-4 w-4" />
+                    Delete
+                  </DropdownMenuItem>
+                </DeleteDataroomDialog>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+          <CardTitle className="text-base">{dataroom.name}</CardTitle>
+          <CardDescription>{itemLabel}</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <p className="text-xs text-muted-foreground">Created {formattedDate}</p>
+        </CardContent>
+      </div>
+    </BorderGlow>
   );
 };
