@@ -2,9 +2,14 @@
 
 import { FC } from 'react';
 
-import { DatabaseIcon, MoreHorizontalIcon, PencilIcon, Trash2Icon } from 'lucide-react';
-
 import type { Dataroom } from 'entities';
+import {
+  DatabaseIcon,
+  MoreHorizontalIcon,
+  PencilIcon,
+  Trash2Icon,
+} from 'lucide-react';
+
 import { formatDate } from 'shared/lib';
 import {
   BorderGlow,
@@ -50,7 +55,7 @@ export const DataroomCard: FC<Props> = ({ dataroom, itemCount, onOpen }) => {
         aria-label={`Open ${dataroom.name}`}
         className="flex flex-1 flex-col rounded-[inherit] text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         onClick={onOpen}
-        onKeyDown={(event) => {
+        onKeyDown={event => {
           if (
             (event.key === 'Enter' || event.key === ' ') &&
             event.target === event.currentTarget
@@ -72,22 +77,31 @@ export const DataroomCard: FC<Props> = ({ dataroom, itemCount, onOpen }) => {
                   size="icon"
                   className="h-7 w-7 text-muted-foreground"
                   aria-label={`Actions for ${dataroom.name}`}
-                  onClick={(event) => event.stopPropagation()}
+                  onClick={event => event.stopPropagation()}
                 >
                   <MoreHorizontalIcon className="h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <RenameDataroomDialog dataroomId={dataroom.id} currentName={dataroom.name}>
-                  <DropdownMenuItem onSelect={(event) => event.preventDefault()}>
+              <DropdownMenuContent
+                align="end"
+                onClick={event => event.stopPropagation()}
+              >
+                <RenameDataroomDialog
+                  dataroomId={dataroom.id}
+                  currentName={dataroom.name}
+                >
+                  <DropdownMenuItem onSelect={event => event.preventDefault()}>
                     <PencilIcon className="h-4 w-4" />
                     Rename
                   </DropdownMenuItem>
                 </RenameDataroomDialog>
                 <DropdownMenuSeparator />
-                <DeleteDataroomDialog dataroomId={dataroom.id} dataroomName={dataroom.name}>
+                <DeleteDataroomDialog
+                  dataroomId={dataroom.id}
+                  dataroomName={dataroom.name}
+                >
                   <DropdownMenuItem
-                    onSelect={(event) => event.preventDefault()}
+                    onSelect={event => event.preventDefault()}
                     className="text-destructive focus:text-destructive"
                   >
                     <Trash2Icon className="h-4 w-4" />
@@ -101,7 +115,9 @@ export const DataroomCard: FC<Props> = ({ dataroom, itemCount, onOpen }) => {
           <CardDescription>{itemLabel}</CardDescription>
         </CardHeader>
         <CardContent>
-          <p className="text-xs text-muted-foreground">Created {formattedDate}</p>
+          <p className="text-xs text-muted-foreground">
+            Created {formattedDate}
+          </p>
         </CardContent>
       </div>
     </BorderGlow>
