@@ -28,7 +28,7 @@ const AppShell: FC<Props> = ({ children }) => {
             href="/"
             className="flex items-center gap-2 font-semibold text-foreground transition-colors hover:text-foreground/80"
           >
-            <BriefcaseBusiness className="h-5 w-5" />
+            <BriefcaseBusiness className="h-5 w-5" aria-hidden="true" />
             <span>Dataroom</span>
           </Link>
         </div>

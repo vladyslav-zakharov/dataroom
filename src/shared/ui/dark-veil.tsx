@@ -99,13 +99,23 @@ export default function DarkVeil({
 }: Props) {
   const ref = useRef<HTMLCanvasElement>(null);
   useEffect(() => {
-    const canvas = ref.current as HTMLCanvasElement;
-    const parent = canvas.parentElement as HTMLElement;
+    const canvas = ref.current;
+    if (!canvas) return;
+    const parent = canvas.parentElement;
+    if (!parent) return;
 
-    const renderer = new Renderer({
-      dpr: Math.min(window.devicePixelRatio, 2),
-      canvas,
-    });
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    let renderer: Renderer | null = null;
+    try {
+      renderer = new Renderer({
+        dpr: Math.min(window.devicePixelRatio, 2),
+        canvas,
+      });
+    } catch {
+      return;
+    }
+    if (!renderer) return;
 
     const gl = renderer.gl;
     const geometry = new Triangle(gl);
@@ -127,9 +137,10 @@ export default function DarkVeil({
     const mesh = new Mesh(gl, { geometry, program });
 
     const resize = () => {
+      if (!parent.isConnected) return;
       const w = parent.clientWidth,
         h = parent.clientHeight;
-      renderer.setSize(w * resolutionScale, h * resolutionScale);
+      renderer!.setSize(w * resolutionScale, h * resolutionScale);
       program.uniforms.uResolution.value.set(w, h);
     };
 
@@ -139,18 +150,28 @@ export default function DarkVeil({
     const start = performance.now();
     let frame = 0;
 
-    const loop = () => {
-      program.uniforms.uTime.value = ((performance.now() - start) / 1000) * speed;
+    const renderScene = () => {
+      program.uniforms.uTime.value = prefersReducedMotion
+        ? 0
+        : ((performance.now() - start) / 1000) * speed;
       program.uniforms.uHueShift.value = hueShift;
       program.uniforms.uNoise.value = noiseIntensity;
       program.uniforms.uScan.value = scanlineIntensity;
       program.uniforms.uScanFreq.value = scanlineFrequency;
       program.uniforms.uWarp.value = warpAmount;
-      renderer.render({ scene: mesh });
+      renderer!.render({ scene: mesh });
+    };
+
+    const loop = () => {
+      renderScene();
       frame = requestAnimationFrame(loop);
     };
 
-    loop();
+    if (prefersReducedMotion) {
+      renderScene();
+    } else {
+      loop();
+    }
 
     return () => {
       cancelAnimationFrame(frame);
