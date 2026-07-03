@@ -5,6 +5,9 @@ import { Urbanist } from 'next/font/google';
 
 import { cn } from 'shared/lib';
 import { TanStackQueryProvider } from 'shared/providers';
+import { AppShell } from 'widgets';
+
+import AppProviders from './providers';
 
 import 'app/styles/global.css';
 
@@ -32,7 +35,11 @@ const RootLayout = ({ children }: Props) => {
           urbanist.className,
         )}
       >
-        <TanStackQueryProvider>{children}</TanStackQueryProvider>
+        <TanStackQueryProvider>
+          <AppProviders>
+            <AppShell>{children}</AppShell>
+          </AppProviders>
+        </TanStackQueryProvider>
       </body>
     </html>
   );
